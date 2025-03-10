@@ -1,0 +1,10 @@
+C:\Users\FireS\source\repos\Hoyle_VTT\bin\Debug\Hoyle_VTT.exe.config
+C:\Users\FireS\source\repos\Hoyle_VTT\bin\Debug\Hoyle_VTT.exe
+C:\Users\FireS\source\repos\Hoyle_VTT\bin\Debug\Hoyle_VTT.pdb
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.csproj.AssemblyReference.cache
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.VTT.resources
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.Properties.Resources.resources
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.csproj.GenerateResource.cache
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.csproj.CoreCompileInputs.cache
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.exe
+C:\Users\FireS\source\repos\Hoyle_VTT\obj\Debug\Hoyle_VTT.pdb
