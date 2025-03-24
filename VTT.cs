@@ -14,11 +14,13 @@ using Microsoft.Win32;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Hoyle_VTT
 {
     public partial class VTT : Form
     {
+        public Grid my_grid;
         public VTT()
         {
             InitializeComponent();
@@ -27,11 +29,32 @@ namespace Hoyle_VTT
             grid_picture_Box.Size = VTT_table_box.Size;
             grid_picture_Box.Location = new Point(0, 0); 
             Console.WriteLine("grid: " + grid_picture_Box.Location + " VTT" + VTT_table_box.Location);
+            Menu_interact_button.Parent = Options_menu;
+            
+            suboptions_Menu.Height = (Options_menu.Height - Menu_interact_button.Height- suboptions_Menu.Location.Y);
+            Menu_interact_button.Dock = DockStyle.Bottom;
+
+
+            Load_map_button.Parent = Button_Box;
+            Change_grid_button.Parent= Button_Box;
+            Drawing_menu_button.Parent = Button_Box;
+            Token_menu_button.Parent = Button_Box;
+
+
+            int gridsize_width = Width / 5;
+            int gridsize_height = Height / 5;
+            my_grid = new Grid();
+            my_grid.set_grid_size(gridsize_width, gridsize_height);
+            Console.WriteLine("grid: " + gridsize_width + "," + gridsize_height);
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
         {
             //statusStrip1.Visible = false;
+            //Options_menu.Parent = splitter1;
+
             
 
         }
@@ -110,9 +133,13 @@ namespace Hoyle_VTT
             int height = origin_img_height;
             int origin_img_width = image1.Width;
             int width = origin_img_width;
-            double ratio=(double)origin_img_height / (double)origin_img_width;
-            int vtt_width = VTT_table_box.MaximumSize.Width;
-            int vtt_height = VTT_table_box.MaximumSize.Height;
+            double ratio= (double) origin_img_height / (double) origin_img_width;
+            //Maximum size was 1250, 654
+            int vtt_width = VTT_table_box.Parent.Width - Options_menu.Width;
+            //Height - Button_Box.Height - user_info_display.Height
+            int modified_height = Button_Box.Height + user_info_display.Height + Padding.Top + Padding.Bottom + VTT_table_box.Location.Y;
+            int vtt_height = VTT_table_box.Parent.Height - modified_height;
+            Console.WriteLine("Vtt height"+Height+'('+ VTT_table_box.Parent.Height+')'+"should equal"+ vtt_height+'+'+ Button_Box.Height+'+'+user_info_display.Height+'('+(vtt_height+Button_Box.Height+user_info_display.Height)+')');
             double vtt_ratio = (double)vtt_width / (double)vtt_height;
             
 
@@ -291,7 +318,150 @@ namespace Hoyle_VTT
             }
 
         }
+
+        class Grid_test
+        {
+            //Only here because every time I try to remove it it breaks Image somehow
+                        protected Grid_test()
+            {
+
+
+            }
+
+        }
+
+        private void VTT_Resize(object sender, EventArgs e)
+        {
+            int modified_height = Button_Box.Height + user_info_display.Height + Padding.Top + Padding.Bottom + VTT_table_box.Location.Y;
+            VTT_table_box.Height = (Height - (modified_height));
+            Console.WriteLine("Vtt height " + Height + '(' + VTT_table_box.Parent.Height + ')' + "should equal " + VTT_table_box.Height + '+' + Button_Box.Height + '+' + user_info_display.Height + '(' + (VTT_table_box.Height + Button_Box.Height + user_info_display.Height) + ')');
+
+            //Console.WriteLine("heights"+Height+VTT_table_box.Parent.Height);
+            Options_menu.Height = VTT_table_box.Height;
+            VTT_table_box.Width = (Width - Options_menu.Width);
+            suboptions_Menu.Height = (Options_menu.Height - Menu_interact_button.Height - suboptions_Menu.Location.Y);
+            
+
+
+            ////VTT_table_box.Image;
+            //Bitmap grid_image = (Bitmap)grid_picture_Box.Image;
+            //ScaleBitmapLogicalToDevice(ref grid_image);
+            //Bitmap table_image = (Bitmap)VTT_table_box.Image;
+            //if (table_image != null)
+            //{
+            //    ScaleBitmapLogicalToDevice(ref table_image);
+            //}
+            //grid_picture_Box.Scale();
+            //PerformAutoScale();
+
+            //splitter1.Height = Height;
+            //splitter1.SendToBack();
+            //splitter1.BackColor = Color.Red;
+            //splitter1.Location = new System.Drawing.Point();
+
     }
+
+        private void VTT_DpiChanged(object sender, DpiChangedEventArgs e)
+        {
+            //grid_picture_Box.
+            
+
+            //splitter1.Update();
+            //splitter2.Update();
+
+
+            //grid_picture_Box.Scale(e);
+        }
+
+        private void grid_picture_Box_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button_Box_Resize(object sender, EventArgs e)
+        {
+            //+Button_Box.Padding.Right+ Button_Box.Padding.Left+ Button_Box.Margin.Right + Button_Box.Margin.Left
+            int modified_width = (Button_Box.Width ) / 5;
+            Load_map_button.Width= modified_width;
+            Load_map_button.Left = 0;
+            grid_toggle_button.Width = modified_width;
+            grid_toggle_button.Left = modified_width+ Load_map_button.Left;
+            Change_grid_button.Width = modified_width;
+            Change_grid_button.Left = modified_width * 2 + Load_map_button.Left;
+            Drawing_menu_button.Width = modified_width;
+            Drawing_menu_button.Left = modified_width * 3 + Load_map_button.Left;
+            Token_menu_button.Width = modified_width;
+            Token_menu_button.Left = modified_width *4 + Load_map_button.Left;
+
+            //+ Button_Box.Padding.Bottom
+            int height_buffer = (Button_Box.Height- Button_Box.Padding.Top)/2;
+            int Button_by_half = Load_map_button.Height/2;
+            int height_modification= height_buffer - (Button_by_half / 2);
+            Load_map_button.Top = height_modification;
+            grid_toggle_button.Top = height_modification;
+            Change_grid_button.Top = height_modification;
+            Drawing_menu_button.Top = height_modification;
+            Token_menu_button.Top = height_modification;
+        }
+    }
+    class Token
+    {
+        public string name;
+        public string Name {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public Image icon;
+        public Image Icon
+        {
+            get { return icon; }
+            set { icon = value; }
+        }
+
+        public float X_pos;
+        public float X_Pos
+        {
+            get { return X_pos; }
+            set { X_pos = value; }
+
+        }
+        public float Y_pos;
+        public float Y_Pos
+        {
+            get { return Y_pos; }
+            set { Y_pos = value; }
+
+        }
+
+        public string owner;
+        public string Owner
+        {
+            get { return owner; }
+            set {  owner = value; }
+        }
+
+        public float width;
+        public float Width
+        {
+            get { return width; }
+            set { width = value; }
+
+        }
+        public float height;
+        public float Height
+        {
+            get { return height; }
+            set { height = value; }
+
+        }
+
+        public Token() {
+        }
+    }
+
+    
+
 }
 
 //unused stuff
