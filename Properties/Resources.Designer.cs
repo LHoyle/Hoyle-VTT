@@ -63,6 +63,16 @@ namespace Hoyle_VTT.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AbandonedDrawingRoom {
+            get {
+                object obj = ResourceManager.GetObject("AbandonedDrawingRoom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap graph_paper_grid_png_4 {
             get {
                 object obj = ResourceManager.GetObject("graph-paper-grid-png-4", resourceCulture);
