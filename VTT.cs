@@ -40,6 +40,11 @@ namespace Hoyle_VTT
         public VTT()
         {
             InitializeComponent();
+
+            this.KeyPreview = true;
+            //this.KeyDown += new KeyEventHandler(VTT_KeyDown);
+
+
             old_grid_Box.Visible = false;
             //makes sure the map
             Maps.Add(current_map);
@@ -299,18 +304,24 @@ namespace Hoyle_VTT
             List<int> size = current_map.map_get_square_size();
             PictureBox new_token_picturebox= new PictureBox();
             token_boxes.Add(new_token_picturebox);
-            new_token_picturebox.Width = size[1]-size[2];
-            new_token_picturebox.Height = size[0]-size[2];
+            new_token_picturebox.Width = size[0]-size[2];
+            new_token_picturebox.Height = size[1]-size[2];
             Top = size[2];
             Left= size[2];
             //new_token.Paint += new System.Windows.Forms.PaintEventHandler(this.token_picture_Box_paint);
             //new_token.Parent = VTT_table_box;
             //new_token.Parent = grid_picture_Box;
 
+
+            new_token_picturebox.Paint += new System.Windows.Forms.PaintEventHandler(this.single_token_picture_Box_paint);
+            this.Controls.Add(new_token_picturebox);
+
             //this.Controls.Add(new_token);
             Token new_Token=current_map.make_new_token(new_token_picturebox);
             new_token_picturebox.BringToFront();
             Token_list_box.Items.Add(new_Token.name);
+
+            current_box= new_token_picturebox;
 
             toolStripStatusLabel1.Text = ("Created token!");
         }
@@ -501,89 +512,188 @@ namespace Hoyle_VTT
         private void VTT_table_box_Click(object sender, EventArgs e){}
         
         //key presses
-        private void VTT_key_press(object sender, KeyPressEventArgs e)
-        {
-            //if (e == Keys.Right)
-            {
 
+        private void VTT_KeyDown(object sender, KeyEventArgs e)
+        {
+            Console.WriteLine($"keydown: {e.KeyData}\n current_box:{current_box}");
+
+            if (e.KeyData == (Keys.Shift | Keys.Up)) 
+            {
+                //Console.WriteLine($"keydown{e.KeyData}, should be shift up");
+
+                shift_up_arrow(e);
+                Console.WriteLine("moved");
+                e.Handled = true;
+                return;
             }
+            if (e.KeyData == (Keys.Shift | Keys.Down))
+            {
+                //Console.WriteLine($"keydown{e.KeyData}, should be shift down");
+
+                shift_down_arrow(e);
+                Console.WriteLine("moved");
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyData == Keys.Up)
+            {
+                //Console.WriteLine($"keydown{e.KeyData}, should be up");
+
+                up_arrow(e);
+                Console.WriteLine("moved");
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyData == Keys.Down)
+            {
+            //Console.WriteLine($"keydown{e.KeyData}, should be down");
+                down_arrow(e);
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyData == Keys.Right)
+            {
+            //Console.WriteLine($"keydown{e.KeyData}, should be right");
+                right_arrow(e);
+                Console.WriteLine("moved");
+                e.Handled = true;
+                return;
+            }
+            if (e.KeyData == Keys.Left)
+            {
+            //Console.WriteLine($"keydown{e.KeyData}, should be left");
+                left_arrow(e);
+                Console.WriteLine("moved");
+                e.Handled = true;
+                return;
+            }
+
+
         }
 
-        private void right_arrow(KeyPressEventArgs e)
+        private void right_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box=current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move right)");
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_east(token_of_box);
+                bool moved=current_map.move_token_east(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
-        private void left_arrow(KeyPressEventArgs e)
+        private void left_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move Left)");
+
+
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_west(token_of_box);
+                bool moved = current_map.move_token_west(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
-        private void up_arrow(KeyPressEventArgs e)
+        private void up_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move up)");
+
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_north(token_of_box);
+                bool moved = current_map.move_token_north(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
-        private void down_arrow(KeyPressEventArgs e)
+        private void down_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move down)");
+
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_south(token_of_box);
+                bool moved = current_map.move_token_south(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
-        private void shift_up_arrow(KeyPressEventArgs e)
+        private void shift_up_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move out)");
+
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_out(token_of_box);
+                bool moved = current_map.move_token_out(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
-        private void shift_down_arrow(KeyPressEventArgs e)
+        private void shift_down_arrow(KeyEventArgs e)
         {
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
+                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move in)");
+
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
                 }
-                current_map.move_token_in(token_of_box);
+                bool moved = current_map.move_token_in(e, token_of_box);
+                e.Handled = true;
+
+                if (moved == false)
+                {
+                    Console.WriteLine("failed to move");
+                }
                 current_box.Invalidate();
             }
         }
@@ -634,7 +744,8 @@ namespace Hoyle_VTT
             
             //grid_picture_Box.BringToFront();
             if (token_boxes != null) {
-             token_picture_Box_paint(sender, e);
+                //current_map.Invalidate_tokens();
+             //token_picture_Box_paint(sender, e);
             }
         }
         private bool options_menu_formatting(int former_menu)
@@ -738,8 +849,13 @@ namespace Hoyle_VTT
                     Console.WriteLine($"tokens_list.Count():{tokens_list.Count()},token_boxes.Count(){token_boxes.Count()}");
                     throw new Exception("how are these not equal?");
                 }
+                Token_list_box.Items.Clear();
 
-                Token_list_box.Items.Add(token_boxes);
+                foreach (Token token in tokens_list)
+                {
+                    Token_list_box.Items.Add(token.name);
+
+                }
                 //Console.WriteLine("submenu changed to token!");
                 Options_menu.Text = "Token menu ";
                 Menu_interact_button.Text = "add token";
@@ -864,8 +980,32 @@ namespace Hoyle_VTT
         }
         protected void token_picture_Box_paint(object sender, PaintEventArgs e)
         {
+            //foreach (PictureBox pic in token_boxes)
+            //{
+            //    if (pic.Parent!= VTT_table_box)
+            //    {
+            //        pic.Parent = VTT_table_box;
+            //    }
+            //}
             current_map.display_token(e);
             
+            //grid_picture_Box.BringToFront();
+        }
+        protected void single_token_picture_Box_paint(object sender, PaintEventArgs e)
+        {
+            foreach (PictureBox pic in token_boxes) {
+                bool same=sender.Equals(pic);
+
+                if (same) 
+                //if (pic.Parent != VTT_table_box & same)
+                {
+                    pic.Parent = VTT_table_box;
+                    current_map.display_token_singular(pic,e);
+                    pic.BringToFront();
+
+                }
+            }
+
             //grid_picture_Box.BringToFront();
         }
         public void VTT_picture_box_size_calculator()
@@ -905,11 +1045,11 @@ namespace Hoyle_VTT
                 //Console.WriteLine("tokenbox is not null");
                 if (token_boxes.Count > 0)
                 {
-                    Console.WriteLine($"tokenbox:{token_boxes} has size of {token_boxes.Count}");
+                    //Console.WriteLine($"tokenbox:{token_boxes} has size of {token_boxes.Count}");
 
                     for (int i = 0; i < token_boxes.Count; i++)
                     {
-                        Console.WriteLine("invalidating token box: "+token_boxes[i]);
+                        //Console.WriteLine("invalidating token box: "+token_boxes[i]);
                         token_boxes[i].Invalidate();
                     }
                 }
@@ -999,10 +1139,22 @@ namespace Hoyle_VTT
             List<Token> tokens_list=current_map.get_token_list();
             Token_list_box.Items.Clear();
             foreach (Token token in tokens_list) { 
-            Token_list_box.Items.Add(token);
+                Token_list_box.Items.Add(token.name); 
+            }
+            foreach (PictureBox box in token_boxes)
+            {
+                Console.Write($"box:{box}\n");
             }
             int selection = Token_list_box.SelectedIndex;
-            current_box = token_boxes[selection];
+            List<Token> current_token_list= current_map.get_token_list();
+            //Console.WriteLine($"current_token_list:{current_token_list}");
+            //Console.WriteLine($"tokens_list:{tokens_list.Count()},token_boxes{token_boxes.Count()}");
+            //Console.WriteLine($"Selection{selection}");
+            if (selection < tokens_list.Count() & selection!=-1) { 
+                current_box = token_boxes[selection];
+            }
+            current_box = current_box;
+            //VTT.
         }
 
     }

@@ -105,7 +105,7 @@ namespace Hoyle_VTT
             //Console.WriteLine("grid: " + gridsize_width + "," + gridsize_height);
 
             //Console.WriteLine("printing grid");
-            Map_grid.print_grid();
+            //Map_grid.print_grid();
             //Console.WriteLine("grid: " + Map_box.Location + " VTT: " + Map_box.Location);
         }
         public void map_matrix_initilization()
@@ -164,7 +164,7 @@ namespace Hoyle_VTT
             //Console.WriteLine("grid: " + gridsize_width + "," + gridsize_height);
 
             //Console.WriteLine("printing grid");
-            Map_grid.print_grid();
+            //Map_grid.print_grid();
             //Console.WriteLine("grid: " + Map_box.Location + " VTT: " + Map_box.Location);
             map_matrix_convert();
         }
@@ -195,19 +195,19 @@ namespace Hoyle_VTT
             int z_max = Elevation_total;
             if (x_max <= 0 & y_max <= 0 & z_max <= 0)
             {
-                Console.WriteLine("grid size changed to 0,0,0. ignoring this change");
+                //Console.WriteLine("grid size changed to 0,0,0. ignoring this change");
                 return;
             }
             if (x_max <= 0 & y_max <= 0)
             {
-                Console.WriteLine("grid size changed to 0,0,0. ignoring this change");
+                //Console.WriteLine("grid size changed to 0,0,0. ignoring this change");
                 return;
             }
             x_max = Math.Max(1, x_max);
             y_max = Math.Max(1, y_max);
             z_max = Math.Max(1, z_max);
             int token_divided_by_3 = (int)Math.Ceiling((double)Token_list.Count() / 3);
-            Console.WriteLine($"token_divided_by_3{token_divided_by_3}");
+            //Console.WriteLine($"token_divided_by_3: {token_divided_by_3}");
 
             x_max = Math.Max(x_max, token_divided_by_3);
             y_max = Math.Max(token_divided_by_3, y_max);
@@ -231,8 +231,8 @@ namespace Hoyle_VTT
             z_max_copy = Math.Min(Location_storage.GetLength(2), z_max);
 
 
-            Console.WriteLine($"Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}],Location_storage:[{Location_storage.GetLength(0)},{Location_storage.GetLength(1)},{Location_storage.GetLength(2)}]");
-            Console.WriteLine($"x_max_copy:{x_max_copy},y_max_copy:{y_max_copy},z_max_copy:{z_max_copy}");
+            //Console.WriteLine($"Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}],Location_storage:[{Location_storage.GetLength(0)},{Location_storage.GetLength(1)},{Location_storage.GetLength(2)}]");
+            //Console.WriteLine($"x_max_copy:{x_max_copy},y_max_copy:{y_max_copy},z_max_copy:{z_max_copy}");
             for (int x = 0; x < Math.Min(Location_storage.GetLength(0), x_max); x++)
             {
                 for (int y = 0; y < Math.Min(Location_storage.GetLength(1), y_max); y++)
@@ -263,11 +263,12 @@ namespace Hoyle_VTT
             z_max_copy = Math.Max(((int)Math.Ceiling((double)Token_list.Count() / 3)), z_max_copy);
 
             }
-            verify_tokens_moved(Math.Min(Location_storage.GetLength(0), x_max), Math.Min(Location_storage.GetLength(1), y_max), Math.Min(Location_storage.GetLength(2), z_max), Location_storage_new);
-            Location_storage = Location_storage_new;
+            Token[,,] third_time=verify_tokens_moved(Math.Min(Location_storage.GetLength(0), x_max), Math.Min(Location_storage.GetLength(1), y_max), Math.Min(Location_storage.GetLength(2), z_max), Location_storage_new);
+            Location_storage = third_time;
+            Map_grid.get_grid_picturebox().Invalidate();
         }
 
-        public void verify_tokens_moved(int x_max_copy, int y_max_copy, int z_max_copy, Token[,,] Location_storage_new)
+        public Token[,,] verify_tokens_moved(int x_max_copy, int y_max_copy, int z_max_copy, Token[,,] Location_storage_new)
         {
             //throw new Exception("unfinished");
             for (int i = 0; i < Token_list.Count(); i++)
@@ -343,6 +344,7 @@ namespace Hoyle_VTT
                             for (int med_x = maximized_x; med_x > 0; med_x = med_x - 1)
                             {
                                 //starts the same search on Y
+                                //Console.WriteLine("searching for Y on all_bad");
                                 new_y = next_location_to_place_token__Y(med_x, maximized_z, Location_storage_new);
                                 if (new_y == -1 & y_max_copy - 1 >= 0)
                                 {
@@ -414,6 +416,7 @@ namespace Hoyle_VTT
                             //x not free on Y coord
                             for (int med_x = maximized_x; med_x > 0; med_x = med_x - 1)
                             {
+                                //Console.WriteLine("searching for Y on x_Bad and y_bad");
                                 new_y = next_location_to_place_token__Y(med_x, Z_coord, Location_storage_new);
                                 if (new_y == -1 & y_max_copy - 1 >= 0)
                                 {
@@ -437,7 +440,7 @@ namespace Hoyle_VTT
                         {
                             Token_list[i].X_coord = new_x;
                             Token_list[i].Y_coord = maximized_y;
-                            Console.WriteLine($"new_x:{new_x},maximized_y:{maximized_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
+                            //Console.WriteLine($"new_x:{new_x},maximized_y:{maximized_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
                             Location_storage_new[new_x, maximized_y, Z_coord] = Token_list[i];
                             fix = true;
                             continue;
@@ -525,12 +528,14 @@ namespace Hoyle_VTT
 
                         }
                         else
-                        { 
-                            //only Y bad
-                            new_y = next_location_to_place_token__Y(X_coord, Z_coord, Location_storage_new);
-                            Console.WriteLine($"new_y:{new_y},y_max_copy{y_max_copy}");
+                        {
+                        //only Y bad
+                        //Console.WriteLine("searching for Y on Y_bad");
+
+                        new_y = next_location_to_place_token__Y(X_coord, Z_coord, Location_storage_new);
+                            //Console.WriteLine($"new_y:{new_y},y_max_copy{y_max_copy}");
                             if (new_y == -1 & y_max_copy - 1 >= 0){
-                                Console.WriteLine($"X_coord:{X_coord},new_y:{new_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
+                                //Console.WriteLine($"X_coord:{X_coord},new_y:{new_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
                                 for (int med_y = maximized_y; med_y >= 0; med_y = med_y - 1)
                                 {
                                     //Searching under X to see if X has more space
@@ -559,7 +564,7 @@ namespace Hoyle_VTT
                             else if (Location_storage[X_coord, new_y, Z_coord] == null)
                             {
                                 Token_list[i].Y_coord = new_y;
-                                Console.WriteLine($"X_coord:{X_coord},new_y:{new_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
+                                //Console.WriteLine($"X_coord:{X_coord},new_y:{new_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
 
                                 Location_storage_new[X_coord, new_y, Z_coord] = Token_list[i];
                                 fix = true;
@@ -683,12 +688,15 @@ namespace Hoyle_VTT
 
                     //}
                 }
+            return Location_storage_new;
             }
         
 
         //display
         public void display_map(PaintEventArgs paint_Event)
         {
+            //Console.WriteLine($"Grid width={Map_grid.get_grid_columns()},Grid Height={Map_grid.get_grid_rows()}, Location_storage.GetLength(0){Location_storage.GetLength(0)},Location_storage.GetLength(1){Location_storage.GetLength(1)}");
+            map_matrix_convert();
             Map_grid.draw_grid(paint_Event);
             //Console.WriteLine($"attempting to display map");
             //Console.WriteLine($"map grid size is {Map_grid.get_grid_picturebox().Size}");
@@ -701,11 +709,13 @@ namespace Hoyle_VTT
             //    //    }
             //}
         }
-        public void display_token(PaintEventArgs paint_Event)
+        public void Invalidate_tokens()
         {
+            map_matrix_convert();
+
             if (Token_list != null)
             {
-                print_token_locations();
+                //print_token_locations();
                 for (int i = 0; i < Token_list.Count; i++)
                 {
                     List<int> token_location = get_token_size(Token_list[i]);
@@ -713,19 +723,63 @@ namespace Hoyle_VTT
                     {
                         throw new Exception("token display error");
                     }
+
+                    //Token_list[i].physical_token.Dispose();
+                    Token_list[i].Invalidate();
+                }
+            }
+        }
+        public void display_token(PaintEventArgs paint_Event)
+        {
+            if (Token_list != null)
+            {
+                //print_token_locations();
+                for (int i = 0; i < Token_list.Count; i++)
+                {
+                    List<int> token_location = get_token_size(Token_list[i]);
+                    if (token_location.Count < 3)
+                    {
+                        throw new Exception("token display error");
+                    }
+
+                    //Token_list[i].physical_token.Dispose();
                     Token_list[i].display_Token(paint_Event, token_location);
                 }
+            }
+        }
+        public void display_token_singular(PictureBox box, PaintEventArgs paint_Event)
+        {
+            Token tok = get_token_by_picturebox(box);
+            if (tok != null)
+            {
+                Console.WriteLine($"displying singular token{tok} ({tok.name}) with picturebox{box}");
+
+                List<int> token_location = get_token_size(tok);
+                if (token_location.Count < 3)
+                {
+                    throw new Exception("token display error");
+                }
+
+                //Token_list[i].physical_token.Dispose();
+                tok.display_Token(paint_Event, token_location);
+            }
+            else
+            {
+                //throw null;
             }
         }
 
         //Tokens
         public Token make_new_token(PictureBox new_token_picturebox)
         {
-            
+            Console.WriteLine($"Grid width={Map_grid.get_grid_columns()},Grid Height={Map_grid.get_grid_rows()}, Location_storage.GetLength(0){Location_storage.GetLength(0)},Location_storage.GetLength(1){Location_storage.GetLength(1)}");
+
             //List<int> dimensions = Map_grid.get_square_size();
             //Console.WriteLine($"the dimensions of the map_grid_size are width={dimensions[0]} and height={dimensions[1]} (for the new token)b");
             //new_token_picturebox.Width = dimensions[0];
             //new_token_picturebox.Height = dimensions[1];
+            //Console.WriteLine("adding new token");
+            //print_token_locations();
 
             List<int> next_location=next_location_to_place_token();
             if (next_location[0] == -1)
@@ -745,13 +799,17 @@ namespace Hoyle_VTT
                 if (Token_list.Count != 0)
                 {
                     //name_token ="Token"+ Token_list.Count.ToString();
-                    Console.WriteLine($"token list:{Token_list}\n end token list. naming the token{name_token}");
+                    //Console.WriteLine($"token list:{Token_list}\n end token list. naming the token{name_token}");
                     made_token = new Token(name_token, new_token_picturebox, next_location[0], next_location[1], next_location[2]);
                     //Token_list.Add(made_token);
                     append_token(made_token);
                     Location_storage[next_location[0], next_location[1], next_location[2]] = made_token;
-                    Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
-                    print_token_locations();
+                    //Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
+                    //print_token_locations();
+
+                    //Console.WriteLine("token should now be in the list");
+
+                    //print_token_locations();
                     return made_token;
                 }
                 //name_token = "Token" + Token_list.Count.ToString();
@@ -761,25 +819,30 @@ namespace Hoyle_VTT
                 append_token(made_token);
                 //Console.WriteLine($"token list:{Token_list}\n end token list. naming the token{name_token}");
 
-                Console.WriteLine($"token list (having started with count =0):{Token_list} end token list, naming the token \"{name_token}\"");
+                //Console.WriteLine($"token list (having started with count =0):{Token_list} end token list, naming the token \"{name_token}\"");
 
-                Console.WriteLine($"[0]{next_location[0]}");
-                Console.WriteLine($"[1]{next_location[1]}");
-                Console.WriteLine($"[2]{next_location[2]}");
+                //Console.WriteLine($"[0]{next_location[0]}");
+                //Console.WriteLine($"[1]{next_location[1]}");
+                //Console.WriteLine($"[2]{next_location[2]}");
 
                 Location_storage[next_location[0], next_location[1], next_location[2]] = made_token;
-                Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
-                print_token_locations();
+                //Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
+                //print_token_locations();
+                //Console.WriteLine("token should now be in the list");
+
+                //print_token_locations();
+
                 return made_token;
             }
             Token_list = new List<Token>();
-            Console.WriteLine("token_list==null");
+            //Console.WriteLine("token_list==null");
             made_token = new Token(name_token, new_token_picturebox, next_location[0], next_location[1], next_location[2]);
             //Token_list.Add(made_token);
             append_token(made_token);
             Location_storage[next_location[0], next_location[1], next_location[2]] = made_token;
-            Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
-            print_token_locations();
+            //Console.WriteLine($" at {next_location[0]},{next_location[1]},{next_location[2]} in location storage ({Location_storage}) the token has been set to {made_token}({made_token.name})");
+            //Console.WriteLine("token should now be in the list");
+            //print_token_locations();
             return made_token;
         }
 
@@ -803,7 +866,7 @@ namespace Hoyle_VTT
 
         public void print_token_locations()
         {
-            Console.WriteLine("printing token locations");
+            Console.WriteLine($"printing token locations Location_storage length:{Location_storage} ({Location_storage.GetLength(0)},{Location_storage.GetLength(1)},{Location_storage.GetLength(2)})");
             for (int i = 0; i < Location_storage.GetLength(0); i++)
             {
                 for (int j = 0; j < Location_storage.GetLength(1); j++)
@@ -903,9 +966,13 @@ namespace Hoyle_VTT
         public int next_location_to_place_token__Y(int x, int z, Token[,,] Location_storage_new)
         {
 
-            int height= Location_storage_new.GetLength(0);
+            int height= Location_storage_new.GetLength(1);
             for (int k = 0; k < height; k++)
-            {
+            //for (int k = 0; k < (height - 1); k++)
+
+                {
+                    //Console.WriteLine($"x:{x} xmax:{Location_storage_new.GetLength(0)}, k:{k} ymax:{Location_storage_new.GetLength(1)}, z:{z} zmax:{Location_storage_new.GetLength(2)}");
+
                 if (Location_storage_new[x, k, z] == null)
                 {
                     return k;
@@ -916,11 +983,11 @@ namespace Hoyle_VTT
         }
         public int next_location_to_place_token__X(int y, int z, Token[,,] Location_storage_new)
         {    
-            int width = Location_storage_new.GetLength(1);
+            int width = Location_storage_new.GetLength(0);
             //Console.WriteLine($"width:{width}");
             for (int k = 0; k < width; k++)
             {
-                Console.WriteLine($"k:{k},width:{width}");
+                //Console.WriteLine($"k:{k},width:{width}");
 
                 if (Location_storage_new[k, y, z] == null)
                 {
@@ -932,64 +999,165 @@ namespace Hoyle_VTT
         }
 
         //move tokens
-        public bool move_token_east(Token token_to_move)
+        public bool move_token_east(KeyEventArgs e,Token token_to_move)
         {
+            //Console.WriteLine($"Grid width={Map_grid.get_grid_columns()},Grid Height={Map_grid.get_grid_rows()}, Location_storage.GetLength(0){Location_storage.GetLength(0)},Location_storage.GetLength(1){Location_storage.GetLength(1)}");
+
+            //Console.WriteLine("moving east");
             if (token_to_move.X_coord + 1 < Location_storage.GetLength(0))
             {
-                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord + 1, token_to_move.Y_coord, token_to_move.Z_coord];
+                //Console.WriteLine("premove");
+                //print_token_locations();
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord+1},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord+1, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+
+                Token change = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord];
+                //Console.WriteLine($"Token{change}");
+                Token being_replaced = Location_storage[token_to_move.X_coord + 1, token_to_move.Y_coord, token_to_move.Z_coord];
+                if (being_replaced != null)
+                {
+                e.Handled = true;
+                    return false;
+                }
+                //Console.WriteLine($"old spot{being_replaced}");
+                Location_storage[token_to_move.X_coord + 1, token_to_move.Y_coord, token_to_move.Z_coord] = change;
+
+
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = null;
                 token_to_move.X_coord = token_to_move.X_coord + 1;
+                Location_storage = Location_storage;
+                //Console.WriteLine("Postmove");
+
+                //print_token_locations();
+                //token_to_move.physical_token.Dispose();
+                token_to_move.Invalidate();
+
+                e.Handled = true;
                 return true;
             }
+                e.Handled = true;
             return false;
+
         }
-        public bool move_token_west(Token token_to_move)
+        public bool move_token_west(KeyEventArgs e,Token token_to_move)
         {
+
             if (token_to_move.X_coord - 1 >= 0)
             {
-                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord - 1, token_to_move.Y_coord, token_to_move.Z_coord];
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord - 1},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord - 1, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //print_token_locations();
+
+                Token change = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord];
+                Token being_replaced = Location_storage[token_to_move.X_coord - 1, token_to_move.Y_coord, token_to_move.Z_coord];
+                if (being_replaced != null)
+                {
+                e.Handled = true;
+                    return false;
+                }
+                Location_storage[token_to_move.X_coord - 1, token_to_move.Y_coord, token_to_move.Z_coord] = change;
+
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = null;
                 token_to_move.X_coord = token_to_move.X_coord - 1;
+                token_to_move.Invalidate();
+
+
+
+                //Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord - 1, token_to_move.Y_coord, token_to_move.Z_coord];
+                //token_to_move.X_coord = token_to_move.X_coord - 1;
+                e.Handled = true;
                 return true;
             }
+                e.Handled = true;
+            return false;
+
+        }
+        public bool move_token_north(KeyEventArgs e,Token token_to_move)
+        {
+            if (token_to_move.Y_coord - 1 >= 0)
+            {
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord-1},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord-1, token_to_move.Z_coord]}. ");
+                //print_token_locations();
+
+                Token change = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord];
+                Token being_replaced = Location_storage[token_to_move.X_coord, token_to_move.Y_coord - 1, token_to_move.Z_coord];
+                if (being_replaced != null)
+                {
+                e.Handled = true;
+                    return false;
+                }
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord - 1, token_to_move.Z_coord] = change;
+
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = null;
+                token_to_move.Y_coord = token_to_move.Y_coord - 1;
+                token_to_move.Invalidate();
+
+                e.Handled = true;
+                return true;
+            }
+                e.Handled = true;
             return false;
         }
-        public bool move_token_north(Token token_to_move)
+        public bool move_token_south(KeyEventArgs e,Token token_to_move)
         {
+
             if (token_to_move.Y_coord + 1 < Location_storage.GetLength(1))
             {
-                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord+1, token_to_move.Z_coord];
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord+1},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord+1, token_to_move.Z_coord]}. ");
+                //print_token_locations();
+
+                Token change = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord];
+                Token being_replaced = Location_storage[token_to_move.X_coord, token_to_move.Y_coord + 1, token_to_move.Z_coord];
+                if (being_replaced != null)
+                {
+                e.Handled = true;
+                    return false;
+                }
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord + 1, token_to_move.Z_coord] = change;
+
+                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = null;
                 token_to_move.Y_coord = token_to_move.Y_coord + 1;
+                token_to_move.Invalidate();
+
+                e.Handled = true;
                 return true;
             }
+                e.Handled = true;
             return false;
         }
-        public bool move_token_south(Token token_to_move)
-        {
-            if (token_to_move.Y_coord - 1 >=0)
-            {
-                Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord-1, token_to_move.Z_coord];
-                token_to_move.Y_coord = token_to_move.Y_coord - 1;
-                return true;
-            }
-            return false;
-        }
-        public bool move_token_out(Token token_to_move)
+        public bool move_token_out(KeyEventArgs e,Token token_to_move)
         {
             if (token_to_move.Z_coord + 1 < Elevation_up)
             {
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord + 1},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord + 1, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //print_token_locations();
                 Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord+1];
                 token_to_move.Y_coord = token_to_move.Y_coord + 1;
+                e.Handled = true;
+
                 return true;
             }
+                e.Handled = true;
             return false;
         }
-        public bool move_token_in(Token token_to_move)
+        public bool move_token_in(KeyEventArgs e,Token token_to_move)
         {
             if (token_to_move.Z_coord - 1 >= Elevation_down)
             {
+                //Console.WriteLine($"Location_storage[{token_to_move.X_coord},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //Console.WriteLine($"New Location_storage[{token_to_move.X_coord + 1},{token_to_move.Y_coord},{token_to_move.Z_coord}]:{Location_storage[token_to_move.X_coord + 1, token_to_move.Y_coord, token_to_move.Z_coord]}. ");
+                //print_token_locations();
                 Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord-1];
                 token_to_move.Z_coord = token_to_move.Z_coord - 1;
+                e.Handled = true;
+
                 return true;
             }
+            e.Handled = true;
+
             return false;
         }
 

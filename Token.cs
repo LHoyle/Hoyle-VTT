@@ -19,6 +19,7 @@ namespace Hoyle_VTT
         public string name { get; set; }
         public Bitmap Icon { get; set; }
         public PictureBox physical_token { get; set; }
+        public Bitmap token_displayed;
         public int X_coord{get;set;}
         public int Y_coord{get;set;}
         public int Z_coord{get;set;}
@@ -27,12 +28,12 @@ namespace Hoyle_VTT
 
         public Token(string name_in, PictureBox token_in)
         {
-            Console.WriteLine($"Initializing token {name} (no positions)");
+            //Console.WriteLine($"Initializing token {name} (no positions)");
 
             name = name_in;
             physical_token=token_in;
             token_meta_size = 2;
-            Console.WriteLine($"finished token {name}");
+            //Console.WriteLine($"finished token {name}");
             token_color=random_color();
 
             //Random random = new Random();
@@ -49,7 +50,7 @@ namespace Hoyle_VTT
         public Token(string name_in, PictureBox token_in, int xpos, int ypos,  int zpos)
         //public Token(string name_in, PictureBox token_in,int ypos, int xpos, int zpos)
         {
-            Console.WriteLine($"Initializing token {name}");
+            //Console.WriteLine($"Initializing token {name}");
 
             name = name_in;
             physical_token = token_in;
@@ -57,13 +58,13 @@ namespace Hoyle_VTT
             Y_coord = ypos;
             Z_coord = zpos;
             token_meta_size = 2;
-            Console.WriteLine($"finished token {name}");
+            //Console.WriteLine($"finished token {name}");
             token_color=random_color();
 
         }
         public Token(string name_in, PictureBox token_in, int xpos, int ypos, int zpos,int size_in)
         {
-            Console.WriteLine($"Initializing token {name} with size {token_meta_size}");
+            //Console.WriteLine($"Initializing token {name} with size {token_meta_size}");
 
             name = name_in;
             physical_token = token_in;
@@ -71,7 +72,7 @@ namespace Hoyle_VTT
             Y_coord = ypos;
             Z_coord = zpos;
             token_meta_size = size_in;
-            Console.WriteLine($"Initializing token {name}");
+            //Console.WriteLine($"Initializing token {name}");
 
             token_color=random_color();
 
@@ -94,22 +95,64 @@ namespace Hoyle_VTT
 
         public void display_Token(PaintEventArgs paint_Event,List<int> size)
         {
-            physical_token.Width = size[1]- (size[2]*2);
-            physical_token.Height = size[0] - (size[2]*2);
-            physical_token.Top= size[1]*X_coord;
-            physical_token.Left= size[0]*Y_coord;
-            Console.WriteLine($"width:{size[1]},height:{size[0]},top:{X_coord},left:{Y_coord}");
 
-            Console.WriteLine($"physical_token rectangle, {physical_token.Top},{physical_token.Left},{physical_token.Width},{physical_token.Height}");
-            Console.WriteLine($"displaying token {name}");
+            Graphics my_graphics = paint_Event.Graphics;
+            //Console.WriteLine($"graphics event{my_graphics}");
+            //if (token_displayed != null)
+            //{
+            //    Console.WriteLine("token_displayed is not null");
+            //    token_displayed.Dispose();
+            //}
+
+
+            //physical_token.Width = size[1]- (size[2]*2);
+            //physical_token.Height = size[0] - (size[2]*2);
+            //physical_token.Top = size[1] * X_coord;
+            //physical_token.Left = size[0] * Y_coord;
+
+
+            physical_token.Width = size[1] - (size[2] * 2);
+            physical_token.Height = size[0] - (size[2] * 2);
+            physical_token.Top= (size[0])* Y_coord;
+            physical_token.Left= (size[1] )*X_coord;
+            physical_token.BackColor = token_color;
+            //Console.WriteLine($"width:{physical_token.Width}, Height: {physical_token.Height}, Top: {physical_token.Top}, Left: {physical_token.Left}");
+            //token_displayed = new Bitmap(physical_token.Width, physical_token.Height, physical_token.Top, physical_token.Left);
+
+
+            //token_displayed = new Bitmap(physical_token.Width, physical_token.Height, my_graphics);
+            //token_displayed = new Bitmap(physical_token.Width, physical_token.Height);
+            token_displayed = new Bitmap(physical_token.Height, physical_token.Width);
+
+            //Console.WriteLine($"token to display:{token_displayed}");
+
+
+            //token_displayed.
+
+            //Console.WriteLine($"width:{size[1]},height:{size[0]},top:{X_coord},left:{Y_coord}");
+
+            //Console.WriteLine($"physical_token rectangle, {physical_token.Top},{physical_token.Left},{physical_token.Width},{physical_token.Height}");
+            //Console.WriteLine($"displaying token {name}");
             if (physical_token == null)
             {
                 throw new Exception("somehow physical token is empty");
             }
-            Console.WriteLine($"display rectangle {physical_token.DisplayRectangle}, {physical_token.DisplayRectangle.Top},{physical_token.DisplayRectangle.Left},{physical_token.DisplayRectangle.Width},{physical_token.DisplayRectangle.Height}");
-            paint_Event.Graphics.Clip = new Region(new Rectangle(physical_token.Top, physical_token.Left, physical_token.Width, physical_token.Height));
-            paint_Event.Graphics.FillRectangle(new SolidBrush(token_color), new Rectangle(physical_token.Top, physical_token.Left, physical_token.Width, physical_token.Height));
 
+
+            //using (Graphics g = Graphics.FromImage(token_displayed))
+            //{
+            //my_graphics.Clip = new Region(new Rectangle(physical_token.Top, physical_token.Left, physical_token.Width, physical_token.Height));
+            //my_graphics.FillRectangle(new SolidBrush(token_color), new Rectangle(physical_token.Top, physical_token.Left, physical_token.Width, physical_token.Height));
+
+            //}
+            //my_graphics.Clip = new Region(new Rectangle(physical_token.Top, physical_token.Left, token_displayed.Width, token_displayed.Height));
+            //my_graphics.FillRectangle(new SolidBrush(token_color), new Rectangle(physical_token.Top, physical_token.Left, token_displayed.Width, token_displayed.Height));
+
+            paint_Event.Graphics.Clip = new Region(new Rectangle(physical_token.Top, physical_token.Left, token_displayed.Width, token_displayed.Height));
+            paint_Event.Graphics.FillRectangle(new SolidBrush(token_color), new Rectangle(physical_token.Top, physical_token.Left, token_displayed.Width, token_displayed.Height));
+
+
+            //Console.WriteLine($"display rectangle {physical_token.DisplayRectangle}, {physical_token.DisplayRectangle.Top},{physical_token.DisplayRectangle.Left},{physical_token.DisplayRectangle.Width},{physical_token.DisplayRectangle.Height}");
             //Console.WriteLine($"physical_token rectangle {physical_token}, {physical_token.Top},{physical_token.Left},{physical_token.Width},{physical_token.Height}");
 
             //physical_token.DisplayRectangle
@@ -141,6 +184,15 @@ namespace Hoyle_VTT
 
 
             //my_graphics.Clear(random_color());
+        }
+        public void Invalidate()
+        {
+            Console.WriteLine($"invalidating Token{name}");
+            physical_token.Invalidate();
+            if (token_displayed != null) { 
+            token_displayed.Dispose();
+            }
+
         }
 
     }

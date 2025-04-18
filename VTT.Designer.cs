@@ -334,7 +334,7 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DpiChanged += new System.Windows.Forms.DpiChangedEventHandler(this.VTT_DpiChanged);
-            this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.VTT_key_press);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.VTT_KeyDown);
             this.Resize += new System.EventHandler(this.VTT_Resize);
             this.Button_Box.ResumeLayout(false);
             this.user_info_display.ResumeLayout(false);

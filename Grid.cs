@@ -158,7 +158,8 @@ namespace Hoyle_VTT
             {
                 grid_bit.Dispose();
             }
-            grid_bit=new Bitmap(stored_map.Width, stored_map.Height);
+            //stored_map.BackColor = Color.Blue;
+            grid_bit =new Bitmap(stored_map.Width, stored_map.Height);
             my_graphics = paint_Event_saved.Graphics;
             int cell_size_y = 0;
             int cell_size_X = 0;
@@ -197,8 +198,8 @@ namespace Hoyle_VTT
                 return;
             }
 
-            using (Graphics g = Graphics.FromImage(grid_bit))
-            {
+            //using (Graphics g = Graphics.FromImage(grid_bit))
+            //{
                 for (int y = 0; y < (height_cells+1); ++y)
                 {
                     int y_first = y * cell_size_y;
@@ -207,6 +208,8 @@ namespace Hoyle_VTT
                     int y_second = y * cell_size_y;
                     //Console.WriteLine($"Valus for the grid are {y_first},{width_first}, and {y_second}. The Cell size y is {cell_size_y} there are {height_cells} height cells.\nThe graphics is {my_graphics} and the pen is {gridpen}");
                     my_graphics.DrawLine(gridpen, 0, y_first, width_first, y_second);
+                    //g.DrawLine(gridpen, 0, y_first, width_first, y_second);
+
                 }
 
                 for (int x = 0; x < (width_cells + 1); ++x)
@@ -218,9 +221,11 @@ namespace Hoyle_VTT
 
 
                     my_graphics.DrawLine(gridpen, x_first, 0, x_second, height_first);
+                    //g.DrawLine(gridpen, x_first, 0, x_second, height_first);
+
                 }
-            }
-            print_grid();
+            //}
+            //print_grid();
         }
 
 
@@ -228,9 +233,9 @@ namespace Hoyle_VTT
         //print
         public void print_grid()
         {
+            Console.WriteLine("grid X" + grid_columns + " Grid Y: " + grid_rows + " grid picture box: " + stored_map); 
             return;}
         
-            //Console.WriteLine("grid X" + grid_columns + " Grid Y: " + grid_rows + " grid picture box: " + stored_map); }
 
     }
 }
