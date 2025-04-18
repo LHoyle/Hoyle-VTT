@@ -43,14 +43,16 @@ namespace Hoyle_VTT
 
             this.KeyPreview = true;
             //this.KeyDown += new KeyEventHandler(VTT_KeyDown);
+            //current_box.BackColor = Color.Red;
 
 
             old_grid_Box.Visible = false;
             //makes sure the map
             Maps.Add(current_map);
             current_map.Map_box=grid_picture_Box;
-
+            //grid_picture_Box.Visible=false;
             grid_picture_Box.Parent = VTT_table_box;
+
             grid_picture_Box.Size = VTT_table_box.Size;
             grid_picture_Box.Location = new Point(0, 0);
             current_map.set_Map_box(grid_picture_Box);
@@ -79,6 +81,7 @@ namespace Hoyle_VTT
             int leftbox= vtt_box_x_left_calculator();
 
             VTT_table_box.Top = topbox;
+
             VTT_table_box.Left = leftbox;
 
             //initialize the grid
@@ -1181,12 +1184,7 @@ namespace Hoyle_VTT
                 if (width > VTT_table_box.MaximumSize.Width)
                 {
 
-                    int oldwidth = width;
-                    Console.WriteLine("width of " + oldwidth + " too big, using window size of " + VTT_table_box.MaximumSize.Width + "for width instead");
-                    width = VTT_table_box.MaximumSize.Width;
-                    //height = VTT_table_box.MaximumSize.Width;
-                    VTT_table_box.Width = height;
-                    double scale_Down_ratio = (double)Width / (double)oldwidth;
+                    int oldwidth = cale_Down_ratio = (double)Width / (double)oldwidth;
                     Console.WriteLine("Scaledown ratio: " + scale_Down_ratio);
                     modified_height = (double)height* ratio;
                     modified_height = modified_height * scale_Down_ratio;
@@ -1195,7 +1193,12 @@ namespace Hoyle_VTT
 
 
                 }
-                else
+                elsewidth;
+                    Console.WriteLine("width of " + oldwidth + " too big, using window size of " + VTT_table_box.MaximumSize.Width + "for width instead");
+                    width = VTT_table_box.MaximumSize.Width;
+                    //height = VTT_table_box.MaximumSize.Width;
+                    VTT_table_box.Width = height;
+                    double s
                 {
                     VTT_table_box.Width = width;
                     modified_width = (double)width * ratio;

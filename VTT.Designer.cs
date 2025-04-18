@@ -257,7 +257,7 @@
             this.grid_picture_Box.BackColor = System.Drawing.Color.Transparent;
             this.grid_picture_Box.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.grid_picture_Box.Cursor = System.Windows.Forms.Cursors.Default;
-            this.grid_picture_Box.Location = new System.Drawing.Point(7, 34);
+            this.grid_picture_Box.Location = new System.Drawing.Point(3, 37);
             this.grid_picture_Box.Margin = new System.Windows.Forms.Padding(2);
             this.grid_picture_Box.MinimumSize = new System.Drawing.Size(90, 90);
             this.grid_picture_Box.Name = "grid_picture_Box";
@@ -278,7 +278,7 @@
             // 
             this.VTT_table_box.Cursor = System.Windows.Forms.Cursors.Default;
             this.VTT_table_box.Image = global::Hoyle_VTT.Properties.Resources.AbandonedDrawingRoom;
-            this.VTT_table_box.Location = new System.Drawing.Point(7, 34);
+            this.VTT_table_box.Location = new System.Drawing.Point(3, 35);
             this.VTT_table_box.Margin = new System.Windows.Forms.Padding(2);
             this.VTT_table_box.MinimumSize = new System.Drawing.Size(90, 90);
             this.VTT_table_box.Name = "VTT_table_box";

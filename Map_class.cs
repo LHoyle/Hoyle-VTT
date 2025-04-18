@@ -46,6 +46,7 @@ namespace Hoyle_VTT
             Map_image = map_in;
             Map_box = new PictureBox();
             Map_box.Image = map_in;
+            Map_box.Visible = false;
             Original_Height = Map_image.Height;
             Calculated_height=Original_Height;
             Original_Width = Map_image.Width;

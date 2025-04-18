@@ -84,6 +84,8 @@ namespace Hoyle_VTT
         public void set_grid_picturebox(PictureBox pictureBox_in)
         {
             stored_map = pictureBox_in;
+            //stored_map.BackColor = Color.Red;
+
             image_width = stored_map.Width;
             image_height = stored_map.Height;
             //my_graphics= stored_map.CreateGraphics();
