@@ -16,6 +16,7 @@ namespace Hoyle_VTT
     [Serializable()]
     public class Map 
     {
+        //test
         //variables
         public Bitmap Map_image;
         public Grid Map_grid;
@@ -890,8 +891,6 @@ namespace Hoyle_VTT
             List<int> gridsize = map_get_square_size();
             int Y_uno  = Location_storage.GetLength(0) / 2;
             int X_one = Location_storage.GetLength(1) / 2;
-            int outx = -1;
-            int outy = -1;
             if (Location_storage[Y_uno, X_one, Elevation_ground] == null)
             {
                 //outx = gridsize[0] * one;
