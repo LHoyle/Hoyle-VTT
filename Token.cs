@@ -187,7 +187,7 @@ namespace Hoyle_VTT
         }
         public void Invalidate()
         {
-            Console.WriteLine($"invalidating Token{name}");
+            //Console.WriteLine($"invalidating Token{name}");
             physical_token.Invalidate();
             if (token_displayed != null) { 
             token_displayed.Dispose();

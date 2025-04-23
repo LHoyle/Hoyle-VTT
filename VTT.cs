@@ -16,6 +16,8 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using Hoyle_VTT.Properties;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.Diagnostics;
 
 namespace Hoyle_VTT
 {
@@ -49,6 +51,7 @@ namespace Hoyle_VTT
             old_grid_Box.Visible = false;
             //makes sure the map
             Maps.Add(current_map);
+            current_map.file_name = "base";
             current_map.Map_box=grid_picture_Box;
             //grid_picture_Box.Visible=false;
             grid_picture_Box.Parent = VTT_table_box;
@@ -120,7 +123,7 @@ namespace Hoyle_VTT
                 //bool exists = false;
                 for (int i = 0; i < Maps.Count(); i++)
                 {
-                    if (name == Maps[i].get_name())
+                    if (name == Maps[i].file_name)
                     {
                         return Maps[i];
                     }
@@ -131,6 +134,8 @@ namespace Hoyle_VTT
         private void load_image_by_map_class(Map map)
         {
             current_map=map;
+            //if (map
+            Maps.Add(map);
             if (grid_picture_Box.Parent != VTT_table_box)
             {
                 grid_picture_Box.Parent = VTT_table_box;
@@ -141,6 +146,21 @@ namespace Hoyle_VTT
             current_map.get_Map_box().Parent = VTT_table_box;
             VTT_table_box.Image = map.get_Map_image();
 
+            List<Token> token_List=current_map.get_token_list();
+            foreach (PictureBox pic in token_boxes)
+            {
+                pic.Visible = false;
+            }
+            token_boxes = new List<PictureBox>();
+            foreach (Token token in token_List)
+            {
+                PictureBox picture = token.physical_token;
+                if (picture.Visible == false)
+                {
+                    picture.Visible = true;
+                }
+                token_boxes.Add(picture);
+            }
             //VTT_table_box.Height = (int)Math.Ceiling(map.Original_Height * map.Ratio);
             //VTT_table_box.Width = (int)Math.Ceiling(map.Original_Width * map.Ratio);
 
@@ -456,9 +476,11 @@ namespace Hoyle_VTT
             toolStripStatusLabel1.Text = ("time to load!");
             //Console.WriteLine("load button clicked!");
 
-            picture_grabbing.InitialDirectory = "c:/Users/FireS/Pictures/Dnd";
-            //picture_grabbing.Filter = "Image files (*.png)|*.png|All Files (*.*)|*.*";
-            picture_grabbing.Filter = "All Files (*.*)|*.*";
+            //picture_grabbing.InitialDirectory = "c:/Users/FireS/Pictures/Dnd";
+            picture_grabbing.InitialDirectory = "c:/";
+
+            picture_grabbing.Filter = "Image files (*.png)|*.png|(*.jpg)|*.jpg|All Files (*.*)|*.*";
+            //picture_grabbing.Filter = "All Files (*.*)|*.*";
 
             if (picture_grabbing.ShowDialog() == DialogResult.OK)
             {
@@ -518,14 +540,14 @@ namespace Hoyle_VTT
 
         private void VTT_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine($"keydown: {e.KeyData}\n current_box:{current_box}");
+            //Console.WriteLine($"keydown: {e.KeyData}\n current_box:{current_box}");
 
             if (e.KeyData == (Keys.Shift | Keys.Up)) 
             {
                 //Console.WriteLine($"keydown{e.KeyData}, should be shift up");
 
                 shift_up_arrow(e);
-                Console.WriteLine("moved");
+                //Console.WriteLine("moved");
                 e.Handled = true;
                 return;
             }
@@ -534,7 +556,7 @@ namespace Hoyle_VTT
                 //Console.WriteLine($"keydown{e.KeyData}, should be shift down");
 
                 shift_down_arrow(e);
-                Console.WriteLine("moved");
+                //Console.WriteLine("moved");
                 e.Handled = true;
                 return;
             }
@@ -543,7 +565,7 @@ namespace Hoyle_VTT
                 //Console.WriteLine($"keydown{e.KeyData}, should be up");
 
                 up_arrow(e);
-                Console.WriteLine("moved");
+                //Console.WriteLine("moved");
                 e.Handled = true;
                 return;
             }
@@ -558,7 +580,7 @@ namespace Hoyle_VTT
             {
             //Console.WriteLine($"keydown{e.KeyData}, should be right");
                 right_arrow(e);
-                Console.WriteLine("moved");
+                //Console.WriteLine("moved");
                 e.Handled = true;
                 return;
             }
@@ -566,7 +588,7 @@ namespace Hoyle_VTT
             {
             //Console.WriteLine($"keydown{e.KeyData}, should be left");
                 left_arrow(e);
-                Console.WriteLine("moved");
+                //Console.WriteLine("moved");
                 e.Handled = true;
                 return;
             }
@@ -579,7 +601,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box=current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move right)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move right)");
                 if (token_of_box == null)
                 {
                     throw new Exception("not found");
@@ -599,7 +621,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move Left)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move Left)");
 
 
                 if (token_of_box == null)
@@ -621,7 +643,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move up)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move up)");
 
                 if (token_of_box == null)
                 {
@@ -642,7 +664,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move down)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move down)");
 
                 if (token_of_box == null)
                 {
@@ -663,7 +685,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move out)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move out)");
 
                 if (token_of_box == null)
                 {
@@ -684,7 +706,7 @@ namespace Hoyle_VTT
             if (current_box != null)
             {
                 Token token_of_box = current_map.get_token_by_picturebox(current_box);
-                Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move in)");
+                //Console.WriteLine($"Token:{token_of_box} ({token_of_box.name}) (move in)");
 
                 if (token_of_box == null)
                 {
@@ -1140,6 +1162,9 @@ namespace Hoyle_VTT
         private void Token_list_box_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             List<Token> tokens_list=current_map.get_token_list();
+            PictureBox current = current_box;
+            Console.Write($"tokens list:{tokens_list}\nwith a count of { tokens_list.Count()}\n");
+
             Token_list_box.Items.Clear();
             foreach (Token token in tokens_list) { 
                 Token_list_box.Items.Add(token.name); 
@@ -1152,20 +1177,16 @@ namespace Hoyle_VTT
             List<Token> current_token_list= current_map.get_token_list();
             //Console.WriteLine($"current_token_list:{current_token_list}");
             //Console.WriteLine($"tokens_list:{tokens_list.Count()},token_boxes{token_boxes.Count()}");
-            //Console.WriteLine($"Selection{selection}");
+            Console.WriteLine($"Selection{selection}");
             if (selection < tokens_list.Count() & selection!=-1) { 
-                current_box = token_boxes[selection];
+                current_box = tokens_list[selection].physical_token;
+                Console.WriteLine($"token selected: {tokens_list[selection].name} ");
             }
             current_box = current_box;
             //VTT.
         }
-
     }
     //todo:
-    // 
-    //Tokens
-    //
-    //Map grid type change
 }
 
 

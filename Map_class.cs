@@ -21,7 +21,11 @@ namespace Hoyle_VTT
         public Bitmap Map_image;
         public Grid Map_grid;
         public List<Token> Token_list=new List<Token>();
-        public string Map_name; 
+
+        //public string file_name;
+        public string Map_name;
+        public string file_name { get; set; }
+
         Token[,,] Location_storage;
 
         public int Calculated_height, Calculated_width, Elevation_up, Elevation_down, Elevation_total;
@@ -205,10 +209,21 @@ namespace Hoyle_VTT
                 //Console.WriteLine("grid size changed to 0,0,0. ignoring this change");
                 return;
             }
+            if (Token_list.Count() != 2) { 
             x_max = Math.Max(1, x_max);
             y_max = Math.Max(1, y_max);
             z_max = Math.Max(1, z_max);
-            int token_divided_by_3 = (int)Math.Ceiling((double)Token_list.Count() / 3);
+            }
+            else
+            {
+
+                x_max = Math.Max(2, x_max);
+                y_max = Math.Max(2, y_max);
+                z_max = Math.Max(2, z_max);
+            }
+            int token_divided_by_3 = (int)Math.Ceiling((double)Token_list.Count());
+            //int token_divided_by_3 = (int)Math.Ceiling((double)Token_list.Count()/3);
+
             //Console.WriteLine($"token_divided_by_3: {token_divided_by_3}");
 
             x_max = Math.Max(x_max, token_divided_by_3);
@@ -412,6 +427,7 @@ namespace Hoyle_VTT
                     if (y_bad)
                     {
                         //x and y bad
+                        //Console.WriteLine($"new_x:{new_x},maximized_y:{maximized_y},Z_coord:{Z_coord},Location_storage_new:[{Location_storage_new.GetLength(0)},{Location_storage_new.GetLength(1)},{Location_storage_new.GetLength(2)}]");
                         new_x = next_location_to_place_token__X(maximized_y, Z_coord, Location_storage_new);
                         if (new_x == -1 & maximized_x - 1 >= 0)
                         {
@@ -438,6 +454,7 @@ namespace Hoyle_VTT
                             }
                             if (fix == true) { continue; }
                         }
+
                         else if (Location_storage[new_x, maximized_y, Z_coord] == null)
                         {
                             Token_list[i].X_coord = new_x;
@@ -493,6 +510,7 @@ namespace Hoyle_VTT
                         //only X bad
                         new_x = next_location_to_place_token__X(Y_coord, Z_coord, Location_storage_new);
                         if (new_x == -1 & maximized_x - 1 >= 0) { throw new Exception("no space"); }
+                        if (maximized_x - 1 >= 0) {  }
                         else if (Location_storage[new_x, Y_coord, Z_coord] == null)
                         {
                             //new x is good
@@ -754,7 +772,7 @@ namespace Hoyle_VTT
             Token tok = get_token_by_picturebox(box);
             if (tok != null)
             {
-                Console.WriteLine($"displying singular token{tok} ({tok.name}) with picturebox{box}");
+                //Console.WriteLine($"displying singular token{tok} ({tok.name}) with picturebox{box}");
 
                 List<int> token_location = get_token_size(tok);
                 if (token_location.Count < 3)
@@ -1333,8 +1351,9 @@ namespace Hoyle_VTT
                 {
                     return Token_list[i];
                 }
-            Console.WriteLine("Token outside of token list");
+
             }
+            Console.WriteLine("Token outside of token list");
             return null;
         }
         public Bitmap get_Map_image()
