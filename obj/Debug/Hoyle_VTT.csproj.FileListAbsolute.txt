@@ -18,3 +18,7 @@ C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.cspr
 C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.csproj.CoreCompileInputs.cache
 C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.exe
 C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.pdb
+C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\bin\Debug\Hoyle_VTT.exe.manifest
+C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\bin\Debug\Hoyle_VTT.application
+C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.exe.manifest
+C:\Users\FireS\source\repos\LHoyle\Hoyle_Senior_project\obj\Debug\Hoyle_VTT.application

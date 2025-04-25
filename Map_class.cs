@@ -1158,7 +1158,14 @@ namespace Hoyle_VTT
 
                 return true;
             }
-                e.Handled = true;
+            set_elevation_up(Elevation_up + 1);
+            Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord + 1];
+            token_to_move.Z_coord = token_to_move.Z_coord + 1;
+            e.Handled = true;
+
+            return true;
+
+            e.Handled = true;
             return false;
         }
         public bool move_token_in(KeyEventArgs e,Token token_to_move)
@@ -1174,6 +1181,15 @@ namespace Hoyle_VTT
 
                 return true;
             }
+
+            set_elevation_down(Elevation_down+ 1);
+            try { 
+            Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord] = Location_storage[token_to_move.X_coord, token_to_move.Y_coord, token_to_move.Z_coord - 1];
+            }
+            catch { return false; }
+            token_to_move.Z_coord = token_to_move.Z_coord - 1;
+            e.Handled = true;
+            return true;
             e.Handled = true;
 
             return false;
