@@ -31,7 +31,10 @@ namespace Hoyle_VTT
         //public Grid my_grid = new Grid();
         protected List<Map> Maps=new List<Map>();
         protected List<PictureBox> token_boxes = new List<PictureBox>();
-        protected Map current_map=new Map("base", global::Hoyle_VTT.Properties.Resources.AbandonedDrawingRoom);
+        //protected Map current_map=new Map("base", global::Hoyle_VTT.Properties.Resources.AbandonedDrawingRoom);
+        protected Map current_map = new Map("base", global::Hoyle_VTT.Properties.Resources.notebookscan_1);
+
+        
         int submenu_selected=0;
         PictureBox current_box;
 

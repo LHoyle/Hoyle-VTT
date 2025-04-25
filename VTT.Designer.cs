@@ -289,7 +289,7 @@
             // VTT_table_box
             // 
             this.VTT_table_box.Cursor = System.Windows.Forms.Cursors.Default;
-            this.VTT_table_box.Image = global::Hoyle_VTT.Properties.Resources.AbandonedDrawingRoom;
+            this.VTT_table_box.Image = global::Hoyle_VTT.Properties.Resources.notebookscan_1;
             this.VTT_table_box.Location = new System.Drawing.Point(4, 41);
             this.VTT_table_box.Margin = new System.Windows.Forms.Padding(2);
             this.VTT_table_box.MinimumSize = new System.Drawing.Size(105, 105);
