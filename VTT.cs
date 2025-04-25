@@ -476,7 +476,6 @@ namespace Hoyle_VTT
             toolStripStatusLabel1.Text = ("time to load!");
             //Console.WriteLine("load button clicked!");
 
-            //picture_grabbing.InitialDirectory = "c:/Users/FireS/Pictures/Dnd";
             picture_grabbing.InitialDirectory = "c:/";
 
             picture_grabbing.Filter = "Image files (*.png)|*.png|(*.jpg)|*.jpg|All Files (*.*)|*.*";
@@ -874,13 +873,25 @@ namespace Hoyle_VTT
                     Console.WriteLine($"tokens_list.Count():{tokens_list.Count()},token_boxes.Count(){token_boxes.Count()}");
                     throw new Exception("how are these not equal?");
                 }
-                Token_list_box.Items.Clear();
 
+                //List<Token> tokens_list = current_map.get_token_list();
+                PictureBox current = current_box;
+                Token_list_box.Items.Clear();
                 foreach (Token token in tokens_list)
                 {
                     Token_list_box.Items.Add(token.name);
-
                 }
+                foreach (PictureBox box in token_boxes)
+                {
+                    Console.Write($"box:{box}\n");
+                }
+                //Token_list_box.Items.Clear();
+
+                //foreach (Token token in tokens_list)
+                //{
+                //    Token_list_box.Items.Add(token.name);
+
+                //}
                 //Console.WriteLine("submenu changed to token!");
                 Options_menu.Text = "Token menu ";
                 Menu_interact_button.Text = "add token";
@@ -1165,14 +1176,14 @@ namespace Hoyle_VTT
             PictureBox current = current_box;
             Console.Write($"tokens list:{tokens_list}\nwith a count of { tokens_list.Count()}\n");
 
-            Token_list_box.Items.Clear();
-            foreach (Token token in tokens_list) { 
-                Token_list_box.Items.Add(token.name); 
-            }
-            foreach (PictureBox box in token_boxes)
-            {
-                Console.Write($"box:{box}\n");
-            }
+            //Token_list_box.Items.Clear();
+            //foreach (Token token in tokens_list) { 
+            //    Token_list_box.Items.Add(token.name); 
+            //}
+            //foreach (PictureBox box in token_boxes)
+            //{
+            //    Console.Write($"box:{box}\n");
+            //}
             int selection = Token_list_box.SelectedIndex;
             List<Token> current_token_list= current_map.get_token_list();
             //Console.WriteLine($"current_token_list:{current_token_list}");
@@ -1184,6 +1195,22 @@ namespace Hoyle_VTT
             }
             current_box = current_box;
             //VTT.
+        }
+
+        private void Token_list_box_MouseEnter(object sender, EventArgs e)
+        {
+
+            List<Token> tokens_list = current_map.get_token_list();
+            PictureBox current = current_box;
+            Token_list_box.Items.Clear();
+            foreach (Token token in tokens_list)
+            {
+                Token_list_box.Items.Add(token.name);
+            }
+            foreach (PictureBox box in token_boxes)
+            {
+                Console.Write($"box:{box}\n");
+            }
         }
     }
     //todo:

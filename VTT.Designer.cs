@@ -183,11 +183,12 @@
             this.Token_list_box.FormattingEnabled = true;
             this.Token_list_box.ItemHeight = 24;
             this.Token_list_box.Location = new System.Drawing.Point(27, 90);
-            this.Token_list_box.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Token_list_box.Margin = new System.Windows.Forms.Padding(4);
             this.Token_list_box.Name = "Token_list_box";
             this.Token_list_box.Size = new System.Drawing.Size(149, 364);
             this.Token_list_box.TabIndex = 11;
             this.Token_list_box.SelectedIndexChanged += new System.EventHandler(this.Token_list_box_SelectedIndexChanged_1);
+            this.Token_list_box.MouseEnter += new System.EventHandler(this.Token_list_box_MouseEnter);
             // 
             // grid_size_box
             // 
@@ -330,7 +331,7 @@
             this.Controls.Add(this.VTT_table_box);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "VTT";
-            this.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Padding = new System.Windows.Forms.Padding(4);
             this.Text = "Hoyle Vitual Table Top";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.Form1_Load);
